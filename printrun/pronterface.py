@@ -170,6 +170,7 @@ class PronterWindow(MainWindow, pronsole.pronsole):
         self.btndict = {}
         self.filehistory = None
         self.autoconnect = False
+        self.fullscreen = False
         self.parse_cmdline(sys.argv[1:])
 
         # FIXME: We need to initialize the main window after loading the
@@ -240,6 +241,8 @@ class PronterWindow(MainWindow, pronsole.pronsole):
         self.bsetpoint = 0.0
         if self.autoconnect:
             self.connect()
+        if self.fullscreen:
+            self.ShowFullScreen(True, style=wx.FULLSCREEN_NOBORDER)
         if self.filename is not None:
             self.do_load(self.filename)
         if self.settings.monitor:
@@ -879,10 +882,12 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
     def add_cmdline_arguments(self, parser):
         pronsole.pronsole.add_cmdline_arguments(self, parser)
         parser.add_argument('-a', '--autoconnect', help = _("automatically try to connect to printer on startup"), action = "store_true")
+        parser.add_argument('-fs', '--fullscreen', help = _("automatically start in full screen mode"), action = "store_true")
 
     def process_cmdline_arguments(self, args):
         pronsole.pronsole.process_cmdline_arguments(self, args)
         self.autoconnect = args.autoconnect
+        self.fullscreen = args.fullscreen
 
     def update_recent_files(self, param, value):
         if self.filehistory is None:
