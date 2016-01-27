@@ -1353,8 +1353,10 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                 self.logError(_("Could not update recent files list:") +
                               "\n" + traceback.format_exc())
             if name.lower().endswith(".stl") or name.lower().endswith(".obj"):
+                self.stlname = name
                 self.slice(name)
             else:
+                self.stlname = ""
                 self.load_gcode_async(name)
         else:
             dlg.Destroy()
@@ -2179,6 +2181,9 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             data = data.replace("[dummy]\n", "")
             with open(configfile, "w") as f:
                 f.write(data)
+
+        if self.stlname:
+            self.slice(self.stlname)
 
 class PronterApp(wx.App):
 
